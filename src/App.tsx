@@ -11,6 +11,7 @@ import TeacherProfile from "./pages/TeacherProfile";
 import TeacherAdministration from "./pages/TeacherAdministration";
 import TeacherStudents from "./pages/TeacherStudents";
 import TeacherArchives from "./pages/TeacherArchives";
+import QuizLobby from "./pages/QuizLobby";
 import CreateQuiz from "./pages/CreateQuiz";
 import LiveQuiz from "./pages/LiveQuiz";
 import JoinQuiz from "./pages/JoinQuiz";
