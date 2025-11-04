@@ -1,8 +1,10 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Users, Zap } from "lucide-react";
+
 const Index = () => {
-  return <div className="min-h-screen bg-background">
+  return (
+    <div className="min-h-screen bg-background">
       {/* Navbar */}
       <nav className="border-b">
         <div className="container mx-auto px-4 py-4">
@@ -26,7 +28,7 @@ const Index = () => {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 lg:py-32">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in">
-          <h1 className="text-5xl lg:text-7xl font-bold gradient-hero bg-clip-text text-stone-600">
+          <h1 className="text-5xl lg:text-7xl font-bold gradient-hero bg-clip-text text-transparent">
             Interactive Live Quizzes
           </h1>
           <p className="text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto">
@@ -56,9 +58,7 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="text-center space-y-4 p-6 rounded-lg bg-card shadow-soft animate-slide-up" style={{
-          animationDelay: "0.1s"
-        }}>
+          <div className="text-center space-y-4 p-6 rounded-lg bg-card shadow-soft animate-slide-up" style={{ animationDelay: "0.1s" }}>
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full gradient-primary">
               <Users className="h-8 w-8 text-white" />
             </div>
@@ -68,9 +68,7 @@ const Index = () => {
             </p>
           </div>
 
-          <div className="text-center space-y-4 p-6 rounded-lg bg-card shadow-soft animate-slide-up" style={{
-          animationDelay: "0.2s"
-        }}>
+          <div className="text-center space-y-4 p-6 rounded-lg bg-card shadow-soft animate-slide-up" style={{ animationDelay: "0.2s" }}>
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-full gradient-primary">
               <Sparkles className="h-8 w-8 text-white" />
             </div>
@@ -81,6 +79,8 @@ const Index = () => {
           </div>
         </div>
       </section>
-    </div>;
+    </div>
+  );
 };
+
 export default Index;
