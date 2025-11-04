@@ -5,7 +5,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { CreateQuestionModal } from "@/components/CreateQuestionModal";
-import { Sparkles, ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { Sparkles, ArrowLeft, Plus, Trash2, User, Users } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 interface Question {
   text: string;
@@ -16,6 +17,7 @@ interface Question {
 const CreateQuiz = () => {
   const navigate = useNavigate();
   const [quizTitle, setQuizTitle] = useState("");
+  const [quizType, setQuizType] = useState<"individual" | "team">("individual");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -61,9 +63,9 @@ const CreateQuiz = () => {
             <p className="text-muted-foreground mt-2">Design your interactive quiz</p>
           </div>
 
-          {/* Quiz Title */}
+          {/* Quiz Setup */}
           <Card className="shadow-soft">
-            <CardContent className="p-6 space-y-4">
+            <CardContent className="p-6 space-y-6">
               <div className="space-y-2">
                 <Label htmlFor="title">Quiz Title</Label>
                 <Input
@@ -73,6 +75,32 @@ const CreateQuiz = () => {
                   onChange={(e) => setQuizTitle(e.target.value)}
                   className="text-lg"
                 />
+              </div>
+
+              <div className="space-y-3">
+                <Label>Quiz Type</Label>
+                <RadioGroup value={quizType} onValueChange={(value) => setQuizType(value as "individual" | "team")}>
+                  <div className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-accent transition-colors cursor-pointer">
+                    <RadioGroupItem value="individual" id="individual" />
+                    <Label htmlFor="individual" className="flex items-center gap-2 cursor-pointer flex-1">
+                      <User className="h-5 w-5 text-primary" />
+                      <div>
+                        <p className="font-medium">Individual</p>
+                        <p className="text-sm text-muted-foreground">Each student answers independently</p>
+                      </div>
+                    </Label>
+                  </div>
+                  <div className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-accent transition-colors cursor-pointer">
+                    <RadioGroupItem value="team" id="team" />
+                    <Label htmlFor="team" className="flex items-center gap-2 cursor-pointer flex-1">
+                      <Users className="h-5 w-5 text-primary" />
+                      <div>
+                        <p className="font-medium">Team</p>
+                        <p className="text-sm text-muted-foreground">Students collaborate in groups</p>
+                      </div>
+                    </Label>
+                  </div>
+                </RadioGroup>
               </div>
             </CardContent>
           </Card>

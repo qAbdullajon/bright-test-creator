@@ -7,6 +7,10 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import TeacherLogin from "./pages/TeacherLogin";
 import TeacherDashboard from "./pages/TeacherDashboard";
+import TeacherProfile from "./pages/TeacherProfile";
+import TeacherAdministration from "./pages/TeacherAdministration";
+import TeacherStudents from "./pages/TeacherStudents";
+import TeacherArchives from "./pages/TeacherArchives";
 import CreateQuiz from "./pages/CreateQuiz";
 import LiveQuiz from "./pages/LiveQuiz";
 import JoinQuiz from "./pages/JoinQuiz";
@@ -25,6 +29,10 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/teacher/login" element={<TeacherLogin />} />
           <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
+          <Route path="/teacher/profile" element={<TeacherProfile />} />
+          <Route path="/teacher/administration" element={<TeacherAdministration />} />
+          <Route path="/teacher/students" element={<TeacherStudents />} />
+          <Route path="/teacher/archives" element={<TeacherArchives />} />
           <Route path="/teacher/create-quiz" element={<CreateQuiz />} />
           <Route path="/teacher/live-quiz" element={<LiveQuiz />} />
           <Route path="/join" element={<JoinQuiz />} />
