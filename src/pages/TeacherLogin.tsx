@@ -6,14 +6,16 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Sparkles } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { $axios } from "@/http/api";
+import { toast } from "sonner";
 
 const TeacherLogin = () => {
   const navigate = useNavigate();
-  
+
   // Login state
   const [loginPhone, setLoginPhone] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  
+
   // Register state
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -21,20 +23,47 @@ const TeacherLogin = () => {
   const [registerPassword, setRegisterPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Mock login - in real app, this would authenticate
-    navigate("/teacher/dashboard");
+    try {
+      const req = await $axios.post('/auth/login', {
+        phone: loginPhone,
+        password: loginPassword
+      })
+      if (req.status === 200) {
+        localStorage.setItem("accessToken", req.data.token);
+        navigate("/teacher/dashboard");
+      }
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Noma'lum xatolik yuz berdi";
+      toast.error('Xatolik', { description: message })
+
+    }
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (registerPassword !== confirmPassword) {
-      alert("Passwords do not match!");
-      return;
+    try {
+      const req = await $axios.post('/auth/register', {
+        firstName,
+        lastName,
+        phone: registerPhone,
+        password: registerPassword
+      })
+      if (req.status === 201) {
+        localStorage.setItem("accessToken", req.data.token);
+        navigate("/teacher/dashboard");
+      }
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        error.message ||
+        "Noma'lum xatolik yuz berdi";
+      toast.error('Xatolik', { description: message })
     }
-    // Mock registration - in real app, this would create account
-    navigate("/teacher/dashboard");
   };
 
   return (
@@ -64,7 +93,7 @@ const TeacherLogin = () => {
                 <TabsTrigger value="login">Login</TabsTrigger>
                 <TabsTrigger value="register">Register</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
@@ -94,7 +123,7 @@ const TeacherLogin = () => {
                   </Button>
                 </form>
               </TabsContent>
-              
+
               <TabsContent value="register">
                 <form onSubmit={handleRegister} className="space-y-4">
                   <div className="space-y-2">

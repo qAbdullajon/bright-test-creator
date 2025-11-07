@@ -11,6 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Plus, Trash2 } from "lucide-react";
+import { Textarea } from "./ui/textarea";
 
 interface CreateQuestionModalProps {
   open: boolean;
@@ -18,13 +19,13 @@ interface CreateQuestionModalProps {
   onSave: (question: {
     text: string;
     options: string[];
-    correctAnswer: number;
+    correctIndex: number;
   }) => void;
 }
 
 export const CreateQuestionModal = ({ open, onOpenChange, onSave }: CreateQuestionModalProps) => {
   const [questionText, setQuestionText] = useState("");
-  const [options, setOptions] = useState(["", ""]);
+  const [options, setOptions] = useState(["", "", ""]);
   const [correctAnswer, setCorrectAnswer] = useState<string>("0");
 
   const handleSave = () => {
@@ -35,7 +36,7 @@ export const CreateQuestionModal = ({ open, onOpenChange, onSave }: CreateQuesti
     onSave({
       text: questionText,
       options,
-      correctAnswer: parseInt(correctAnswer),
+      correctIndex: parseInt(correctAnswer),
     });
 
     // Reset form
@@ -76,7 +77,7 @@ export const CreateQuestionModal = ({ open, onOpenChange, onSave }: CreateQuesti
         <div className="space-y-6 py-4">
           <div className="space-y-2">
             <Label htmlFor="question">Question Text</Label>
-            <Input
+            <Textarea
               id="question"
               placeholder="Enter your question..."
               value={questionText}
@@ -85,19 +86,6 @@ export const CreateQuestionModal = ({ open, onOpenChange, onSave }: CreateQuesti
           </div>
 
           <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <Label>Answer Options</Label>
-              <Button 
-                type="button" 
-                variant="outline" 
-                size="sm" 
-                onClick={addOption}
-                className="h-8"
-              >
-                <Plus className="h-4 w-4 mr-1" />
-                Add Option
-              </Button>
-            </div>
             <RadioGroup value={correctAnswer} onValueChange={setCorrectAnswer}>
               {options.map((option, index) => (
                 <div key={index} className="flex items-center gap-2">
@@ -122,6 +110,19 @@ export const CreateQuestionModal = ({ open, onOpenChange, onSave }: CreateQuesti
                 </div>
               ))}
             </RadioGroup>
+            <div className="flex items-center justify-between">
+              <Label>Answer Options</Label>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={addOption}
+                className="h-8"
+              >
+                <Plus className="h-4 w-4 mr-1" />
+                Add Option
+              </Button>
+            </div>
             <p className="text-xs text-muted-foreground">Select the correct answer</p>
           </div>
         </div>

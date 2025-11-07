@@ -1,26 +1,28 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { CreateQuestionModal } from "@/components/CreateQuestionModal";
-import { Sparkles, ArrowLeft, Plus, Trash2, User, Users } from "lucide-react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Sparkles, ArrowLeft, Plus, Trash2 } from "lucide-react";
+import { useQuiz } from "@/hooks/use-question";
 
 interface Question {
+  id?: number;
   text: string;
   options: string[];
-  correctAnswer: number;
+  correctIndex: number;
 }
 
 const CreateQuiz = () => {
   const navigate = useNavigate();
+  const params = useParams()
   const [quizTitle, setQuizTitle] = useState("");
-  const [quizType, setQuizType] = useState<"individual" | "team">("individual");
   const [questions, setQuestions] = useState<Question[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const { addMutation, getQuery } = useQuiz()
   const handleAddQuestion = (question: Question) => {
     setQuestions([...questions, question]);
   };
@@ -30,9 +32,19 @@ const CreateQuiz = () => {
   };
 
   const handleSaveQuiz = () => {
-    // In real app, this would save to backend
+    addMutation.mutate({ title: quizTitle, questions })
     navigate("/teacher/dashboard");
   };
+
+  useEffect(() => {
+    if (getQuery.data && params.id) {
+      const { title, questions } = getQuery.data.find(a => a.id == params.id)
+      setQuizTitle(title)
+      setQuestions(questions)
+    }
+  }, [getQuery.data])
+
+  if (getQuery.isLoading) return <p>⏳ Ma’lumot yuklanmoqda...</p>
 
   return (
     <div className="min-h-screen bg-background">
@@ -59,7 +71,7 @@ const CreateQuiz = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Header */}
           <div>
-            <h1 className="text-4xl font-bold">Create Quiz</h1>
+            <h1 className="text-4xl font-bold">{params.id ? 'Update Quiz' : 'Create Quiz'}</h1>
             <p className="text-muted-foreground mt-2">Design your interactive quiz</p>
           </div>
 
@@ -70,37 +82,11 @@ const CreateQuiz = () => {
                 <Label htmlFor="title">Quiz Title</Label>
                 <Input
                   id="title"
-                  placeholder="e.g., Mathematics Quiz 1"
+                  placeholder="Mathematics Quiz 1"
                   value={quizTitle}
                   onChange={(e) => setQuizTitle(e.target.value)}
                   className="text-lg"
                 />
-              </div>
-
-              <div className="space-y-3">
-                <Label>Quiz Type</Label>
-                <RadioGroup value={quizType} onValueChange={(value) => setQuizType(value as "individual" | "team")}>
-                  <div className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-accent transition-colors cursor-pointer">
-                    <RadioGroupItem value="individual" id="individual" />
-                    <Label htmlFor="individual" className="flex items-center gap-2 cursor-pointer flex-1">
-                      <User className="h-5 w-5 text-primary" />
-                      <div>
-                        <p className="font-medium">Individual</p>
-                        <p className="text-sm text-muted-foreground">Each student answers independently</p>
-                      </div>
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2 p-4 border rounded-lg hover:bg-accent transition-colors cursor-pointer">
-                    <RadioGroupItem value="team" id="team" />
-                    <Label htmlFor="team" className="flex items-center gap-2 cursor-pointer flex-1">
-                      <Users className="h-5 w-5 text-primary" />
-                      <div>
-                        <p className="font-medium">Team</p>
-                        <p className="text-sm text-muted-foreground">Students collaborate in groups</p>
-                      </div>
-                    </Label>
-                  </div>
-                </RadioGroup>
               </div>
             </CardContent>
           </Card>
@@ -129,18 +115,17 @@ const CreateQuiz = () => {
                       <div className="flex justify-between items-start gap-4">
                         <div className="flex-1 space-y-3">
                           <div className="flex items-start gap-3">
-                            <span className="font-bold text-primary">Q{index + 1}.</span>
+                            <span className="font-bold text-primary">{index + 1}.</span>
                             <p className="font-medium">{question.text}</p>
                           </div>
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 ml-6">
                             {question.options.map((option, optIndex) => (
                               <div
                                 key={optIndex}
-                                className={`p-2 rounded text-sm ${
-                                  optIndex === question.correctAnswer
-                                    ? "bg-success/10 text-success font-medium"
-                                    : "bg-muted"
-                                }`}
+                                className={`p-2 rounded text-sm ${optIndex === question.correctIndex
+                                  ? "bg-success/10 text-success font-medium"
+                                  : "bg-muted"
+                                  }`}
                               >
                                 {String.fromCharCode(65 + optIndex)}. {option}
                               </div>
@@ -162,17 +147,14 @@ const CreateQuiz = () => {
             )}
           </div>
 
-          {/* Save Button */}
-          {questions.length > 0 && (
-            <div className="flex justify-end gap-3">
-              <Button variant="outline" asChild>
-                <Link to="/teacher/dashboard">Cancel</Link>
-              </Button>
-              <Button onClick={handleSaveQuiz} size="lg">
-                Save Quiz
-              </Button>
-            </div>
-          )}
+          <div className="flex justify-end gap-3">
+            <Button variant="outline" asChild>
+              <Link to="/teacher/dashboard">Cancel</Link>
+            </Button>
+            <Button onClick={handleSaveQuiz} size="lg">
+              Save Quiz
+            </Button>
+          </div>
         </div>
       </div>
 

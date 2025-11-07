@@ -5,20 +5,19 @@ import { Sparkles, Users, Zap } from "lucide-react";
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Navbar */}
       <nav className="border-b">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
+            <Link to={'/'} className="flex items-center gap-2">
               <Sparkles className="h-6 w-6 text-primary" />
               <span className="text-xl font-bold">Mini-Test</span>
-            </div>
+            </Link>
             <div className="flex gap-3">
               <Button asChild variant="ghost">
                 <Link to="/join">Join Quiz</Link>
               </Button>
               <Button asChild>
-                <Link to="/teacher/login">Teacher Login</Link>
+                <Link to="/teacher/dashboard">Teacher Login</Link>
               </Button>
             </div>
           </div>
@@ -28,15 +27,16 @@ const Index = () => {
       {/* Hero Section */}
       <section className="container mx-auto px-4 py-20 lg:py-32">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in">
-          <h1 className="text-5xl lg:text-7xl font-bold gradient-hero bg-clip-text text-transparent">
+          <h1 className="text-5xl lg:text-7xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-red-500">
             Interactive Live Quizzes
           </h1>
+
           <p className="text-xl lg:text-2xl text-muted-foreground max-w-2xl mx-auto">
             Create engaging quizzes and watch students compete in real-time. Make learning fun and interactive!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
             <Button asChild variant="hero" size="lg" className="text-lg px-8">
-              <Link to="/teacher/login">Create a Quiz</Link>
+              <Link to="/teacher/dashboard">Create a Quiz</Link>
             </Button>
             <Button asChild variant="outline" size="lg" className="text-lg px-8">
               <Link to="/join">Join a Quiz</Link>

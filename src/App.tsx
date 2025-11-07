@@ -1,50 +1,57 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import TeacherLogin from "./pages/TeacherLogin";
 import TeacherDashboard from "./pages/TeacherDashboard";
 import TeacherProfile from "./pages/TeacherProfile";
-import TeacherAdministration from "./pages/TeacherAdministration";
 import TeacherStudents from "./pages/TeacherStudents";
 import TeacherArchives from "./pages/TeacherArchives";
-import QuizLobby from "./pages/QuizLobby";
 import CreateQuiz from "./pages/CreateQuiz";
 import LiveQuiz from "./pages/LiveQuiz";
 import JoinQuiz from "./pages/JoinQuiz";
-import QuizRoom from "./pages/QuizRoom";
-import Results from "./pages/Results";
+import Layout from "./pages/Layout";
 
 const queryClient = new QueryClient();
 
-const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/teacher/login" element={<TeacherLogin />} />
-          <Route path="/teacher/dashboard" element={<TeacherDashboard />} />
-          <Route path="/teacher/profile" element={<TeacherProfile />} />
-          <Route path="/teacher/administration" element={<TeacherAdministration />} />
-          <Route path="/teacher/students" element={<TeacherStudents />} />
-          <Route path="/teacher/archives" element={<TeacherArchives />} />
-          <Route path="/teacher/create-quiz" element={<CreateQuiz />} />
-          <Route path="/teacher/live-quiz" element={<LiveQuiz />} />
-          <Route path="/join" element={<JoinQuiz />} />
-          <Route path="/quiz-room" element={<QuizRoom />} />
-          <Route path="/results" element={<Results />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
-);
+const AppRoutes = () => {
+
+  return (
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/teacher/login" element={<TeacherLogin />} />
+      <Route path="/teacher" element={<Layout />}>
+        <Route path="dashboard" element={<TeacherDashboard />} />
+        <Route path="profile" element={<TeacherProfile />} />
+        <Route path="students" element={<TeacherStudents />} />
+        <Route path="archives" element={<TeacherArchives />} />
+        <Route path="create-quiz" element={<CreateQuiz />} />
+        <Route path="edit-quiz/:id" element={<CreateQuiz />} />
+        <Route path="dashboard/:id" element={<LiveQuiz />} />
+      </Route>
+
+      <Route path="/join" element={<JoinQuiz />} />
+
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  );
+};
+
+const App = () => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner position="bottom-right" richColors />
+        <BrowserRouter>
+          <AppRoutes />
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+};
 
 export default App;
