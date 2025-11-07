@@ -9,6 +9,7 @@ import { Answer, Leaderboard } from "@/components/Leaderboard";
 import { QuestionCard } from "@/components/QuestionCard";
 import { Timer } from "@/components/Timer";
 import { Link } from "react-router-dom";
+import { API_URL } from "@/http/api";
 
 let socket: Socket;
 
@@ -42,7 +43,7 @@ const QuizPage = () => {
   }, [currentParticipant]);
 
   useEffect(() => {
-    socket = io("http://localhost:4000");
+    socket = io(API_URL);
 
     // new participant joined
     socket.on("newParticipant", (data: any) => {

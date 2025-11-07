@@ -39,9 +39,8 @@ $api.interceptors.response.use(
       localStorage.removeItem("accessToken");
       if (unauthorizedHandler) unauthorizedHandler();
     }
-
     return Promise.reject(err);
   }
 );
 
-export { $api, $axios };
+export { $api, $axios, API_URL };

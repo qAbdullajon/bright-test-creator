@@ -9,10 +9,10 @@ import { Sparkles, ArrowLeft, SkipForward, StopCircle, ArrowLeftToLine, CirclePl
 import { Quiz, useQuiz } from "@/hooks/use-question";
 import { StartDialog } from "@/components/Dialog";
 import { toast } from "sonner";
-import { $api } from "@/http/api";
+import { $api, API_URL } from "@/http/api";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:4000", {
+const socket = io(API_URL, {
   transports: ["websocket"],
 });
 
