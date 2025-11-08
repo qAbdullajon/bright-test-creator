@@ -54,7 +54,7 @@ const LiveQuiz = () => {
       if (res.status === 200) {
         setOpen(false)
         const { roomCode, status, duration, maxParticipants } = res.data.quiz
-        setQuiz((prev) => ({ ...prev, roomCode, status, duration, maxParticipants }))
+        setQuiz((prev) => ({ ...prev, roomCode, status, duration, maxParticipants, participants: [] }))
         socket.emit("createRoom", { quizId: quiz?.id, roomCode });
       }
     } catch (error) {
@@ -70,7 +70,7 @@ const LiveQuiz = () => {
     try {
       socket.emit("goLive", { code: quiz.roomCode });
       toast.success("Quiz boshlandi!");
-      setQuiz((prev) => prev && { ...prev, status: "active", participants: [] });
+      setQuiz((prev) => prev && { ...prev, status: "active" });
     } catch (error) {
       toast.error("Xatolik", { description: "Quizni boshlashda muammo" });
     }
@@ -108,8 +108,8 @@ const LiveQuiz = () => {
     socket.on("timerUpdate", ({ timeLeft }) => {
       setTimeLeft(timeLeft);
     });
-    socket.on("quizFinished", ({ answers }) => {
-      setQuiz((prev) => ({ ...prev, status: 'draft' }))
+    socket.on("quizFinished", ({ participants }) => {
+      setQuiz((prev) => ({ ...prev, status: 'draft', participants }))
     });
 
     return () => {
@@ -219,9 +219,15 @@ const LiveQuiz = () => {
             </div>
 
             {/* Leaderboard */}
-            {quiz.status !== "draft" && quiz.participants.length > 0 && (
+            {quiz.participants.length > 0 && (
               <div className="lg:col-span-1">
-                <Leaderboard entries={quiz.participants} type="join" />
+                {
+                  quiz.status === "draft" ? (
+                    <Leaderboard entries={quiz.participants} type="result" />
+                  ) : (
+                    <Leaderboard entries={quiz.participants} type="join" />
+                  )
+                }
               </div>
             )}
           </div>

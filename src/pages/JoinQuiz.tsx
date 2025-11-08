@@ -209,6 +209,9 @@ const QuizPage = () => {
               </p>
             </Card>
             <Leaderboard entries={participants} highlightName={currentParticipant.name} type="result" />
+            {
+              console.log(participants)
+            }
           </div>
         )}
       </div>
